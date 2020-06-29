@@ -1,11 +1,15 @@
 const { default: SlippiGame } = require('slp-parser-js');
+const { exec } = require('child_process');
 const chokidar = require('chokidar');
 const _ = require('lodash');
 var config = require('config');
 var stage_id_info = config.get('stage_id_info');
-console.log(stage_id_info);
-const listenPath = process.argv[2];
+// console.log(stage_id_info);
+const listenPath = process.argv[2] || config.get('slippi_rec_dir');
 console.log(`Listening at: ${listenPath}`);
+const fs = require('fs');
+const path = require('path');
+var test_mp3 = path.join(__dirname, 'test.mp3');
 
 const watcher = chokidar.watch(listenPath, {
   ignored       : '!*.slp', // TODO: This doesn't work. Use regex?
@@ -58,6 +62,8 @@ watcher.on('change', (path) => {
     console.log(settings.stageId);
     let stage_id = settings.stageId;
     console.log(stage_id_info[stage_id]);
+    let stage_info = stage_id_info[stage_id];
+    playSongForStage(stage_info);
     gameState.settings = settings;
   }
 
@@ -119,3 +125,18 @@ watcher.on('change', (path) => {
 
   // console.log(`Read took: ${Date.now() - start} ms`);
 });
+function resolveRelativePath(rel_path) {
+  rel_path = path.normalize(rel_path);
+  let absolute_path = path.join(__dirname, rel_path);
+  return absolute_path;
+}
+
+function playSongForStage(stage_info) {
+  let absolute_path = resolveRelativePath(stage_info['mp3_paths'][0]);
+  if (fs.existsSync(absolute_path)) {
+    console.log(`file exists, playing ${absolute_path}`);
+    exec(`"C:\\Program Files\\VideoLAN\\VLC\\vlc.exe" "${absolute_path}"`);
+  } else {
+    console.log(`no such file ${absolute_path}`);
+  }
+}
