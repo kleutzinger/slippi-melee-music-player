@@ -1,7 +1,9 @@
 const { default: SlippiGame } = require('slp-parser-js');
 const chokidar = require('chokidar');
 const _ = require('lodash');
-
+var config = require('config');
+var stage_id_info = config.get('stage_id_info');
+console.log(stage_id_info);
 const listenPath = process.argv[2];
 console.log(`Listening at: ${listenPath}`);
 
@@ -50,9 +52,12 @@ watcher.on('change', (path) => {
   }
 
   if (!gameState.settings && settings) {
+    // new game startup
     console.log(`[Game Start] New game has started`);
     console.log(settings);
     console.log(settings.stageId);
+    let stage_id = settings.stageId;
+    console.log(stage_id_info[stage_id]);
     gameState.settings = settings;
   }
 
