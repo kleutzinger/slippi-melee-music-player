@@ -3,11 +3,11 @@
   "vlc_path": "C:\\Program Files\\VideoLAN\\VLC\\vlc.exe",
   "stage_id_info": {
     "2": {
-      "mp3_paths": [ "melee-mp3\\12  -  Fountain of Dreams.mp3" ],
+      "mp3_paths": [ "melee-looped-mp3\\fountain.mp3" ],
       "stage_name": "FOUNTAIN_OF_DREAMS"
     },
     "3": {
-      "mp3_paths": [ "melee-mp3/16  -  Pokemon Stadium.mp3" ],
+      "mp3_paths": [ "melee-looped-mp3\\stadium.mp3" ],
       "stage_name": "POKEMON_STADIUM"
     },
     "4": {
@@ -27,7 +27,7 @@
       "stage_name": "CORNERIA"
     },
     "8": {
-      "mp3_paths": [ "melee-mp3\\10  -  Yoshi's Story.mp3" ],
+      "mp3_paths": [ "melee-looped-mp3\\yoshis-story.mp3" ],
       "stage_name": "YOSHIS_STORY"
     },
     "9": {
@@ -103,7 +103,7 @@
       "stage_name": "FLAT_ZONE"
     },
     "28": {
-      "mp3_paths": [ "melee-mp3\\30  -  Dream Land N64.mp3" ],
+      "mp3_paths": [ "melee-looped-mp3\\dreamland.mp3" ],
       "stage_name": "DREAM_LAND_N64"
     },
     "29": {
@@ -115,11 +115,11 @@
       "stage_name": "KONGO_JUNGLE_N64"
     },
     "31": {
-      "mp3_paths": [ "melee-mp3\\53  -  Battlefield.mp3" ],
+      "mp3_paths": [ "melee-looped-mp3\\battlefield.mp3" ],
       "stage_name": "BATTLEFIELD"
     },
     "32": {
-      "mp3_paths": [ "melee-mp3\\54  -  Final Destination.mp3" ],
+      "mp3_paths": [ "melee-looped-mp3\\final-destination.mp3" ],
       "stage_name": "FINAL_DESTINATION"
     }
   }

@@ -63,7 +63,7 @@ watcher.on('change', (path) => {
     let stage_id = settings.stageId;
     console.log(stage_id_info[stage_id]);
     let stage_info = stage_id_info[stage_id];
-    playSongForStage(stage_info);
+    playSongForStage2(stage_info);
     gameState.settings = settings;
   }
 
@@ -135,8 +135,22 @@ function playSongForStage(stage_info) {
   let absolute_path = resolveRelativePath(stage_info['mp3_paths'][0]);
   if (fs.existsSync(absolute_path)) {
     console.log(`file exists, playing ${absolute_path}`);
-    exec(`"C:\\Program Files\\VideoLAN\\VLC\\vlc.exe" "${absolute_path}"`);
+    exec(`"C:\\Program Files\\VideoLAN\\VLC\\vlc.exe" -L "${absolute_path}"`);
   } else {
     console.log(`no such file ${absolute_path}`);
+  }
+}
+
+function playSongForStage2(stage_info) {
+  const song_path = resolveRelativePath(stage_info['mp3_paths'][0]);
+  const player_path = path.join(__dirname, '1by1.exe');
+  if (fs.existsSync(song_path)) {
+    console.log(`file exists, playing ${song_path}`);
+    var child = require('child_process').execFile(player_path, [ song_path ], {
+      windowsHide : true,
+      detached    : true
+    });
+  } else {
+    console.log(`no such file ${song_path}`);
   }
 }
