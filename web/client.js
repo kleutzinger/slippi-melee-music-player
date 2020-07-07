@@ -1,4 +1,4 @@
-socket = io();
+socket = io.connect();
 socket.on('ping', (data) => {
   console.log(data);
 });

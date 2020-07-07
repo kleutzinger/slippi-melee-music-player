@@ -28,7 +28,6 @@ io.sockets.on('connection', function(socket) {
 });
 
 setInterval(() => {
-  console.log('emit');
   io.emit('ping', { song: 'testo' });
 }, 2000);
 
