@@ -1,3 +1,8 @@
+socket = io();
+socket.on('ping', (data) => {
+  console.log(data);
+});
+
 var $audio = $('#myAudio');
 $('input').on('change', function(e) {
   var target = e.currentTarget;

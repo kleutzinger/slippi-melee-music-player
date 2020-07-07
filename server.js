@@ -11,6 +11,25 @@ var express = require('express'),
 app.use(express.static(__dirname + '/web'));
 app.use('/sounds', express.static(__dirname + '/sounds'));
 
-app.listen(port);
+const server = app.listen(port, () => {
+  console.log('Listening on port: ' + port);
+});
+const io = require('socket.io')(server);
+
+io.sockets.on('connection', function(socket) {
+  console.log('connection');
+  socket.on('messageChange', function(data) {
+    console.log(data);
+    socket.emit('receive', data.message.split('').reverse().join(''));
+  });
+  socket.on('test', (d) => {
+    console.log(d);
+  });
+});
+
+setInterval(() => {
+  console.log('emit');
+  io.emit('ping', { song: 'testo' });
+}, 2000);
 
 // open(`http://localhost:${port}`);
