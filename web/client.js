@@ -1,8 +1,3 @@
-socket = io.connect();
-socket.on('ping', (data) => {
-  console.log(data);
-});
-
 var $audio = $('#myAudio');
 $('input').on('change', function(e) {
   var target = e.currentTarget;
@@ -39,7 +34,6 @@ let startSong = (songObj) => {
     $audio.trigger('play');
   } else {
     $audio.unbind('end');
-
     $audio.attr('src', songObj.loop);
     $audio.trigger('play');
     $audio.attr('loop', true);
@@ -50,14 +44,15 @@ let stopSong = () => {
   $audio.trigger('pause');
 };
 
-startSong(fountain_song);
+// startSong(fountain_song);
 let $h1 = $('<h1 onclick="$(this).remove()">click to init</h1>');
 
 $(document).ready(function() {
   $('<p>Hello</p>').appendTo('body');
   $h1.appendTo('body');
+  initSocket();
 });
 
 $('body').one('click', function() {
-  setSong(bf_song);
+  // setSong(bf_song);
 });

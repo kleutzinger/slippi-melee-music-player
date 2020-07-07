@@ -1,5 +1,6 @@
 var open = require('open');
-
+const homedir = require('os').homedir();
+console.log(`homedir ${homedir}`);
 // opens the url in the default browser
 // specify the app to open in
 // opn('http://sindresorhus.com', {app: 'firefox'});
@@ -18,17 +19,12 @@ const io = require('socket.io')(server);
 
 io.sockets.on('connection', function(socket) {
   console.log('connection');
-  socket.on('messageChange', function(data) {
-    console.log(data);
-    socket.emit('receive', data.message.split('').reverse().join(''));
-  });
-  socket.on('test', (d) => {
-    console.log(d);
-  });
+  socket.emit('startSong', { song: 'testo' });
 });
 
+// io.emit('startSong', { song: 'testo' });
 setInterval(() => {
-  io.emit('ping', { song: 'testo' });
-}, 2000);
+  io.emit('stopSong', { song: 'testo' });
+}, 5000);
 
 // open(`http://localhost:${port}`);
