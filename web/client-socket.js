@@ -9,8 +9,11 @@ function initSocket() {
   socket.on('startSong', (data) => {
     console.log('start song');
     console.log(data);
-    console.log('overwrite data:', fountain_song);
-    data = fountain_song;
+    // console.log('overwrite data:', fountain_song);
+    // data = fountain_song;
+    if (typeof data === 'string') {
+      data = { loop: data };
+    }
     startSong(data);
     $('#nowPlaying').text(data.loop);
   });
