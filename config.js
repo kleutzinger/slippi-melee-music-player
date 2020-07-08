@@ -1,7 +1,11 @@
 const config = {
-  slippi_rec_dir : 'C:\\Users\\kevin\\Documents\\Slippi',
-  vlc_path       : 'C:\\Program Files\\VideoLAN\\VLC\\vlc.exe',
-  stage_id_info  : {
+  slippi_rec_dir        : 'C:\\Users\\kevin\\Documents\\Slippi',
+  vlc_path              : 'C:\\Program Files\\VideoLAN\\VLC\\vlc.exe',
+  // end game when no new frames for this many ms
+  fileChangeTimeoutMs   : 500,
+  // how often to poll for file change time delta
+  fileChangeDeltaPollMs : 500,
+  stage_id_info         : {
     '2'  : {
       song_paths : [
         {

@@ -15,6 +15,7 @@ app.use('/sounds', express.static(path.join(process.cwd(), 'sounds')));
 
 const server = app.listen(port, () => {
   console.log('Listening on port: ' + port);
+  console.log(`http://localhost:${port}/`);
 });
 const io = require('socket.io')(server);
 
@@ -57,6 +58,8 @@ var stage_id_info = config.stage_id_info;
 const listenPath = process.argv[2] || config['slippi_rec_dir'];
 console.log(`Listening at: ${listenPath}`);
 const fs = require('fs');
+var timeOfLastFileChange = null;
+var gameAborted = false;
 
 const watcher = chokidar.watch(listenPath, {
   ignored       : '!*.slp', // TODO: This doesn't work. Use regex?
@@ -69,12 +72,13 @@ const watcher = chokidar.watch(listenPath, {
 const gameByPath = {};
 watcher.on('change', (path) => {
   const start = Date.now();
-
+  timeOfLastFileChange = start;
   let gameState, settings, stats, frames, latestFrame, gameEnd;
   try {
     let game = _.get(gameByPath, [ path, 'game' ]);
     if (!game) {
       console.log(`New file at: ${path}`);
+      gameAborted = false;
       game = new SlippiGame(path);
       gameByPath[path] = {
         game  : game,
@@ -83,6 +87,17 @@ watcher.on('change', (path) => {
           detectedPunishes : {}
         }
       };
+      var slippiFileActiveCheck = setInterval(() => {
+        let fileChangeTimeDelta = Date.now() - timeOfLastFileChange;
+        if (fileChangeTimeDelta > config.fileChangeTimeoutMs) {
+          gameAborted = true;
+          clearInterval(slippiFileActiveCheck);
+          io.emit('stopSong');
+          console.log(
+            `Game aborted (no new frames for at least ${config.fileChangeTimeoutMs}ms)`
+          );
+        }
+      }, config.fileChangeDeltaPollMs);
     }
 
     gameState = _.get(gameByPath, [ path, 'state' ]);
@@ -100,7 +115,7 @@ watcher.on('change', (path) => {
   if (!gameState.settings && settings) {
     // new game startup
     console.log(`[Game Start] New game has started`);
-    console.log(settings);
+    // console.log(settings);
     console.log(settings.stageId);
     let stage_id = settings.stageId;
     console.log(stage_id_info[stage_id]);
@@ -121,7 +136,6 @@ watcher.on('change', (path) => {
     //     `${frameData.post.stocksRemaining} stocks`
     // );
   });
-
   if (gameEnd) {
     // NOTE: These values and the quitter index will not work until 2.0.0 recording code is
     // NOTE: used. This code has not been publicly released yet as it still has issues
@@ -140,6 +154,5 @@ watcher.on('change', (path) => {
         : '';
     console.log(`[Game Complete] Type: ${endMessage}${lrasText}`);
   }
-
   // console.log(`Read took: ${Date.now() - start} ms`);
 });
