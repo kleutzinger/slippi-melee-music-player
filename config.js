@@ -8,6 +8,7 @@ const config = {
   stage_id_info         : {
     '2'  : {
       song_paths : [
+        'sounds/dreamland-royalty-free.ogg',
         {
           intro : 'sounds/fountain-intro.ogg',
           loop  : 'sounds/fountain.ogg'
@@ -16,23 +17,35 @@ const config = {
       stage_name : 'FOUNTAIN_OF_DREAMS'
     },
     '8'  : {
-      song_paths : [ 'sounds/yoshis-story.ogg' ],
+      song_paths : [
+        'sounds/yoshis-story-royalty-free.ogg',
+        'sounds/yoshis-story.ogg'
+      ],
       stage_name : 'YOSHIS_STORY'
     },
     '31' : {
-      song_paths : [ 'sounds/battlefield.ogg' ],
+      song_paths : [
+        'sounds/battlefield-royalty-free.ogg',
+        'sounds/battlefield.ogg'
+      ],
       stage_name : 'BATTLEFIELD'
     },
     '32' : {
-      song_paths : [ 'sounds/final-destination.ogg' ],
+      song_paths : [
+        'sounds/battlefield-royalty-free.ogg',
+        'sounds/final-destination.ogg'
+      ],
       stage_name : 'FINAL_DESTINATION'
     },
     '3'  : {
-      song_paths : [ 'sounds/stadium.ogg' ],
+      song_paths : [ 'sounds/stadium-royalty-free.ogg', 'sounds/stadium.ogg' ],
       stage_name : 'POKEMON_STADIUM'
     },
     '28' : {
-      song_paths : [ 'sounds/dreamland.ogg' ],
+      song_paths : [
+        'sounds/dreamland-royalty-free.ogg',
+        'sounds/dreamland.ogg'
+      ],
       stage_name : 'DREAM_LAND_N64'
     },
     '4'  : {
