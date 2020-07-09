@@ -2,7 +2,11 @@ var open = require('open');
 const config = require('./config.js');
 console.log(config);
 const path = require('path');
+const fs = require('fs');
 const homedir = require('os').homedir();
+const sounds_dir = path.join(process.cwd(), 'sounds');
+let static_directories = [];
+console.log(`sounds dir ${sounds_dir}`);
 console.log(`homedir ${homedir}`);
 
 var express = require('express'),
@@ -11,16 +15,41 @@ var express = require('express'),
 
 app.use(express.static(path.join(__dirname, '/web')));
 // app.use('/sounds', express.static(path.join(__dirname, 'sounds')));
-app.use('/sounds', express.static(path.join(process.cwd(), 'sounds')));
+app.use('/sounds', express.static(sounds_dir));
+
+const getDirectories = (source) =>
+  fs
+    .readdirSync(source, { withFileTypes: true })
+    .filter((dirent) => dirent.isDirectory())
+    .map((dirent) => dirent.name);
+
+getDirectories(sounds_dir);
+
+const setStaticDirs = (parent_dir) => {
+  const dirs = getDirectories(parent_dir);
+  dirs.map((dir) => {
+    const joined = path.join(parent_dir, dir);
+    app.use('/sounds', express.static(joined));
+    console.log(`setting sounds/${dir} (${joined})to static dir`);
+  });
+};
+setStaticDirs(sounds_dir);
 
 const server = app.listen(port, () => {
   console.log('Listening on port: ' + port);
-  console.log(`http://localhost:${port}/`);
+  console.log(`open in browser: http://localhost:${port}/`);
 });
 const io = require('socket.io')(server);
 
 io.sockets.on('connection', function(socket) {
-  console.log('connection');
+  let connectedCount = Object.keys(io.sockets.sockets).length;
+  console.log(Object.keys(io.sockets.sockets));
+  console.log(`connection number ${connectedCount}`);
+  if (connectedCount > 1 && config.autoClose2ndWebpage) {
+    socket.disconnect();
+    // socket.emit('closePage');
+    console.log('instance already running! closing');
+  }
   // socket.emit('startSong', config.stage_id_info['8'].song_paths[0]);
 });
 
@@ -46,18 +75,20 @@ function playSongForStage(stage_info) {
   io.emit('startSong', infoToSong(stage_info));
 }
 
-// open(`http://localhost:${port}`);
+if (config.autoOpenWebpageOnRun) {
+  open(`http://localhost:${port}`);
+}
 
 // Slippi stuff below ******
 
 const { default: SlippiGame } = require('slp-parser-js');
 const chokidar = require('chokidar');
 const _ = require('lodash');
+const { connect } = require('http2');
 var stage_id_info = config.stage_id_info;
 // console.log(stage_id_info);
 const listenPath = process.argv[2] || config['slippi_rec_dir'];
 console.log(`Listening at: ${listenPath}`);
-const fs = require('fs');
 var timeOfLastFileChange = null;
 var gameAborted = false;
 

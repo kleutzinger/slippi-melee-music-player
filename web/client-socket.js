@@ -21,4 +21,9 @@ function initSocket() {
   socket.on('stopSong', (data) => {
     stopSong();
   });
+
+  socket.on('closePage', (data) => {
+    // socket.disconnect();
+    window.close();
+  });
 }

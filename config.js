@@ -4,9 +4,12 @@ const config = {
   // end game when no new frames for this many ms
   fileChangeTimeoutMs   : 500,
   // how often to poll for file change time delta
-  fileChangeDeltaPollMs : 500,
+  fileChangeDeltaPollMs : 250,
+  autoClose2ndWebpage   : false, // broken
+  autoOpenWebpageOnRun  : false, // works
   stage_id_info         : {
     '2'  : {
+      basedir    : 'fountain',
       song_paths : [
         'sounds/dreamland-royalty-free.ogg',
         {
@@ -17,6 +20,7 @@ const config = {
       stage_name : 'FOUNTAIN_OF_DREAMS'
     },
     '8'  : {
+      basedir    : 'yoshis',
       song_paths : [
         'sounds/yoshis-story-royalty-free.ogg',
         'sounds/yoshis-story.ogg'
@@ -24,6 +28,7 @@ const config = {
       stage_name : 'YOSHIS_STORY'
     },
     '31' : {
+      basedir    : 'battlefield',
       song_paths : [
         'sounds/battlefield-royalty-free.ogg',
         'sounds/battlefield.ogg'
@@ -31,6 +36,7 @@ const config = {
       stage_name : 'BATTLEFIELD'
     },
     '32' : {
+      basedir    : 'final',
       song_paths : [
         'sounds/battlefield-royalty-free.ogg',
         'sounds/final-destination.ogg'
@@ -42,6 +48,7 @@ const config = {
       stage_name : 'POKEMON_STADIUM'
     },
     '28' : {
+      basedir    : 'dreamland',
       song_paths : [
         'sounds/dreamland-royalty-free.ogg',
         'sounds/dreamland.ogg'
