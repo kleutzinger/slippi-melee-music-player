@@ -1,14 +1,15 @@
 const config = {
+  // *********************************************
   // uncomment and edit below to set where slippi puts your .slp files
   // slippi_rec_dir        : 'C:\\Users\\kevin\\Documents\\Slippi',
+  // *********************************************
 
-  // end game when no new frames for this many ms
   fileChangeTimeoutMs   : 500,
-  // how often to poll for file change time delta
   fileChangeDeltaPollMs : 250,
   autoClose2ndWebpage   : false, // broken
   autoOpenWebpageOnRun  : false, // works
   discardRoyaltyFree    : false, // set to false for a lol
+  socketDebug           : false,
   stage_id_info         : {
     '2'  : {
       dir_name   : 'fountain',

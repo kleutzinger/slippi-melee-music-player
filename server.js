@@ -25,8 +25,8 @@ try {
 }
 if (!foundSlippiFiles) {
   console.log(`warning! no .slp files found in:
-  \n   ${config.slippi_rec_dir}
-  please modify your config.js -> slippi_rec_dir
+     ${config.slippi_rec_dir}
+please modify your config.js -> slippi_rec_dir
   `);
 }
 const sounds_dir = path.join(process.cwd(), 'sounds');
@@ -66,11 +66,12 @@ const server = app.listen(port, () => {
   // console.log('Listening on port: ' + port);
 });
 const io = require('socket.io')(server);
-
 io.sockets.on('connection', function(socket) {
   let connectedCount = Object.keys(io.sockets.sockets).length;
-  console.log(Object.keys(io.sockets.sockets));
-  console.log(`connection number ${connectedCount}`);
+  if (config.socketDebug) {
+    console.log(Object.keys(io.sockets.sockets));
+    console.log(`connection number ${connectedCount}`);
+  }
   if (connectedCount > 1 && config.autoClose2ndWebpage) {
     // socket.disconnect();
     // socket.emit('closePage');
@@ -101,7 +102,7 @@ if (config.autoOpenWebpageOnRun) {
   console.log('opening local webpage');
   open(`http://localhost:${port}`);
 } else {
-  console.log(`please open:\n   http://localhost:${port}`);
+  console.log(`Please open in web browser:\n   http://localhost:${port}`);
 }
 
 // ************************   Slippi stuff below ****** ******

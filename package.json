@@ -11,6 +11,9 @@
   "pkg": {
     "assets": [ "sounds/*", "web/*" ]
   },
+  "scripts": {
+    "start": "node server.js"
+  },
   "bin": "server.js",
   "name": "slippi-melee-music-player"
 }
