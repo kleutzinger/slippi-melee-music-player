@@ -9,10 +9,27 @@ const _ = require('lodash');
 const { connect } = require('http2');
 
 const homedir = require('os').homedir();
+if (!config.slippi_rec_dir) {
+  config.slippi_rec_dir = path.join(homedir, 'Documents', 'Slippi');
+}
+let foundSlippiFiles = false;
+try {
+  for (file of fs.readdirSync(config.slippi_rec_dir)) {
+    if (file.endsWith('.slp')) {
+      foundSlippiFiles = true;
+      break;
+    }
+  }
+} catch (err) {
+  console.log(err);
+}
+if (!foundSlippiFiles) {
+  console.log(`warning! no .slp files found in:
+  \n   ${config.slippi_rec_dir}
+  please modify your config.js -> slippi_rec_dir
+  `);
+}
 const sounds_dir = path.join(process.cwd(), 'sounds');
-let static_directories = [];
-console.log(`sounds dir ${sounds_dir}`);
-console.log(`homedir ${homedir}`);
 
 var express = require('express'),
   app = express(),
@@ -34,8 +51,6 @@ const getFiles = (source) =>
     .filter((dirent) => dirent.isFile())
     .map((dirent) => dirent.name);
 
-getDirectories(sounds_dir);
-
 const setStaticDirs = (parent_dir) => {
   const dirs = getDirectories(parent_dir);
   dirs.map((dir) => {
@@ -43,13 +58,12 @@ const setStaticDirs = (parent_dir) => {
     app.use('/sounds', express.static(joined));
     // console.log(`setting static: sounds/${dir} (${joined})`);
   });
-  console.log(`set ${dirs.length} stage dirs from ${parent_dir}`);
+  // console.log(`set ${dirs.length} stage dirs from ${parent_dir}`);
 };
 setStaticDirs(sounds_dir);
 
 const server = app.listen(port, () => {
-  console.log('Listening on port: ' + port);
-  console.log(`open in browser: http://localhost:${port}/`);
+  // console.log('Listening on port: ' + port);
 });
 const io = require('socket.io')(server);
 
@@ -58,17 +72,11 @@ io.sockets.on('connection', function(socket) {
   console.log(Object.keys(io.sockets.sockets));
   console.log(`connection number ${connectedCount}`);
   if (connectedCount > 1 && config.autoClose2ndWebpage) {
-    socket.disconnect();
+    // socket.disconnect();
     // socket.emit('closePage');
-    console.log('instance already running! closing');
+    console.log('multiple instances running! closing');
   }
-  // socket.emit('startSong', config.stage_id_info['8'].song_paths[0]);
 });
-
-// io.emit('startSong', { song: 'testo' });
-// setInterval(() => {
-//   io.emit('stopSong', { song: 'testo' });
-// }, 5000);
 
 function infoToSong(stage_info) {
   try {
@@ -84,22 +92,24 @@ function infoToSong(stage_info) {
     console.log(`error getting songs ${stage_info} \n ${err}`);
   }
 }
-console.log(infoToSong(config.stage_id_info['2']));
 
 function playSongForStage(stage_info) {
   io.emit('startSong', infoToSong(stage_info));
 }
 
 if (config.autoOpenWebpageOnRun) {
+  console.log('opening local webpage');
   open(`http://localhost:${port}`);
+} else {
+  console.log(`please open:\n   http://localhost:${port}`);
 }
 
-// Slippi stuff below ******
+// ************************   Slippi stuff below ****** ******
 
 var stage_id_info = config.stage_id_info;
 // console.log(stage_id_info);
 const listenPath = process.argv[2] || config['slippi_rec_dir'];
-console.log(`Listening at: ${listenPath}`);
+// console.log(`Looking for Slippi files at: ${listenPath}`);
 var timeOfLastFileChange = null;
 var gameAborted = false;
 
@@ -136,7 +146,7 @@ watcher.on('change', (path) => {
           clearInterval(slippiFileActiveCheck);
           io.emit('stopSong');
           console.log(
-            `Game aborted (no new frames for at least ${config.fileChangeTimeoutMs}ms)`
+            `Game ended (no new frames for at least ${config.fileChangeTimeoutMs}ms)`
           );
         }
       }, config.fileChangeDeltaPollMs);
@@ -186,7 +196,7 @@ watcher.on('change', (path) => {
       2 : 'GAME!',
       7 : 'No Contest'
     };
-    console.log('GAME ENDDDD');
+    console.log('Game over. Ending Song');
     io.emit('stopSong');
     const endMessage = _.get(endTypes, gameEnd.gameEndMethod) || 'Unknown';
 

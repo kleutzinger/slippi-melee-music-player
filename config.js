@@ -1,5 +1,7 @@
 const config = {
-  slippi_rec_dir        : 'C:\\Users\\kevin\\Documents\\Slippi',
+  // uncomment and edit below to set where slippi puts your .slp files
+  // slippi_rec_dir        : 'C:\\Users\\kevin\\Documents\\Slippi',
+
   // end game when no new frames for this many ms
   fileChangeTimeoutMs   : 500,
   // how often to poll for file change time delta
