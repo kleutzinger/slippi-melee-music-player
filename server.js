@@ -1,10 +1,15 @@
 var open = require('open');
 const config = require('./config.js');
-console.log(config);
+// console.log(config);
 const path = require('path');
 const fs = require('fs');
+const { default: SlippiGame } = require('slp-parser-js');
+const chokidar = require('chokidar');
+const _ = require('lodash');
+const { connect } = require('http2');
+
 const homedir = require('os').homedir();
-const sounds_dir = path.join(process.cwd(), 'sounds');
+const sounds_dir = path.join(process.cwd(), 'sounds_nonfree');
 let static_directories = [];
 console.log(`sounds dir ${sounds_dir}`);
 console.log(`homedir ${homedir}`);
@@ -23,6 +28,12 @@ const getDirectories = (source) =>
     .filter((dirent) => dirent.isDirectory())
     .map((dirent) => dirent.name);
 
+const getFiles = (source) =>
+  fs
+    .readdirSync(source, { withFileTypes: true })
+    .filter((dirent) => dirent.isFile())
+    .map((dirent) => dirent.name);
+
 getDirectories(sounds_dir);
 
 const setStaticDirs = (parent_dir) => {
@@ -30,8 +41,9 @@ const setStaticDirs = (parent_dir) => {
   dirs.map((dir) => {
     const joined = path.join(parent_dir, dir);
     app.use('/sounds', express.static(joined));
-    console.log(`setting sounds/${dir} (${joined})to static dir`);
+    // console.log(`setting static: sounds/${dir} (${joined})`);
   });
+  console.log(`set ${dirs.length} stage dirs from ${parent_dir}`);
 };
 setStaticDirs(sounds_dir);
 
@@ -59,17 +71,20 @@ io.sockets.on('connection', function(socket) {
 // }, 5000);
 
 function infoToSong(stage_info) {
-  let zeroth_song = stage_info.song_paths[0];
-  let outSong = {};
-  outSong['stage_name'] = stage_info['stage_name'];
-  if (typeof zeroth_song === 'string') {
-    outSong['loop'] = zeroth_song;
-  } else if (typeof zeroth_song === 'object') {
-    outSong['loop'] = zeroth_song['loop'];
-    outSong['intro'] = zeroth_song['intro'];
+  try {
+    stage_dir = path.join(sounds_dir, stage_info.dir_name);
+    // console.log(getFiles(stage_dir));
+    song_files = getFiles(stage_dir);
+    song_files = song_files.filter(
+      (f) => !f.includes('royalty-free') || !config.discardRoyaltyFree
+    );
+    rand_song_file = _.shuffle(song_files)[0];
+    return { loop: `sounds/${rand_song_file}` };
+  } catch (err) {
+    console.log(`error getting songs ${stage_info} \n ${err}`);
   }
-  return outSong;
 }
+console.log(infoToSong(config.stage_id_info['2']));
 
 function playSongForStage(stage_info) {
   io.emit('startSong', infoToSong(stage_info));
@@ -81,10 +96,6 @@ if (config.autoOpenWebpageOnRun) {
 
 // Slippi stuff below ******
 
-const { default: SlippiGame } = require('slp-parser-js');
-const chokidar = require('chokidar');
-const _ = require('lodash');
-const { connect } = require('http2');
 var stage_id_info = config.stage_id_info;
 // console.log(stage_id_info);
 const listenPath = process.argv[2] || config['slippi_rec_dir'];

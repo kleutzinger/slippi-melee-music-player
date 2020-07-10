@@ -45,11 +45,7 @@ let stopSong = () => {
 };
 
 // startSong(fountain_song);
-let $h1 = $('<h1 onclick="$(this).remove()">click to init</h1>');
-
 $(document).ready(function() {
-  $('<p>Hello</p>').appendTo('body');
-  $h1.appendTo('body');
   initSocket();
 });
 
