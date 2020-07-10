@@ -9,7 +9,7 @@ const _ = require('lodash');
 const { connect } = require('http2');
 
 const homedir = require('os').homedir();
-const sounds_dir = path.join(process.cwd(), 'sounds_nonfree');
+const sounds_dir = path.join(process.cwd(), 'sounds');
 let static_directories = [];
 console.log(`sounds dir ${sounds_dir}`);
 console.log(`homedir ${homedir}`);
