@@ -1,11 +1,11 @@
-based on this  
-https://github.com/project-slippi/slp-parser-js/blob/master/scripts/realtimeFileReads.js  
+https://github.com/kleutzinger/slippi-melee-music-player  
 
 ### Ensuring everything works  
 1. "Slippi Recording" gecko code must be enabled in dolphin  
 2. If your slippi recordings do not output to the default Documents/Slippi folder
 You'll need to uncomment the slippi_output_dir in the config.js and point it to wherever your slippi files output  
-3. to allow music to auto play before you've clicked on the page:  ![](web/autoplay.png)  
+3. to allow music to auto play before you've clicked on the page:  
+![](web/autoplay.png)  
 4. Finally, restart the server or refresh the page if nothing is working
 
 ### How to modify songs  
@@ -26,3 +26,6 @@ node server.js
 open ```http://localhost:5669/``` in a browser.  
 then start up slippi and it'll play songs when games start.  
 slippi recordings must be ON.  
+
+based on this:  
+https://github.com/project-slippi/slp-parser-js/blob/master/scripts/realtimeFileReads.js  
