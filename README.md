@@ -3,10 +3,10 @@ https://github.com/project-slippi/slp-parser-js/blob/master/scripts/realtimeFile
 
 ### Ensuring everything works  
 1. "Slippi Recording" gecko code must be enabled in dolphin  
-2. You may need to uncomment the slippi_output_dir in the config.js and point it to wherever your slippi files output  
-(defaults to Documents/Slippi)
-3. to allow music to auto play before you've clicked on the page:  
-![](web/autoplay.png)  
+2. If your slippi recordings do not output to the default Documents/Slippi folder
+You'll need to uncomment the slippi_output_dir in the config.js and point it to wherever your slippi files output  
+3. to allow music to auto play before you've clicked on the page:  ![](web/autoplay.png)  
+4. Finally, restart the server or refresh the page if nothing is working
 
 ### How to modify songs  
 songs are stored in stage folders inside the sounds/ direcotry  

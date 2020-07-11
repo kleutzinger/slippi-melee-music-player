@@ -132,7 +132,7 @@ function playSongForStage(stage_info) {
 }
 
 if (config.autoOpenWebpageOnRun) {
-  console.log('opening local webpage');
+  console.log('opening local webpage at ' + `http://localhost:${port}`);
   open(`http://localhost:${port}`);
 } else {
   console.log(`Please open in web browser:\n   http://localhost:${port}`);

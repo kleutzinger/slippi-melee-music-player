@@ -4,11 +4,10 @@ const config = {
   // slippi_output_dir        : 'C:\\Users\\kevin\\Documents\\Slippi',
   // *********************************************
 
-  fileChangeTimeoutMs   : 1200,
-  fileChangeDeltaPollMs : 250,
+  fileChangeTimeoutMs   : 1200, // how long to wait after a game ends to quit out
+  fileChangeDeltaPollMs : 250, // how often to check when a game
   autoClose2ndWebpage   : false, // broken
-  autoOpenWebpageOnRun  : false, // works
-  discardRoyaltyFree    : false, // set to false for a lol
+  autoOpenWebpageOnRun  : true, // auto open the webpage when the server starts
   socketDebug           : false,
   stage_id_info         : {
     '2'  : {
