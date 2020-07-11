@@ -1,7 +1,8 @@
 var open = require('open');
-const config = require('./config.js');
-// console.log(config);
 const path = require('path');
+const config = require(path.join(process.cwd(), 'config.js'));
+// console.log(config);
+config.royalty_status = 'exclude';
 const fs = require('fs');
 const { default: SlippiGame } = require('slp-parser-js');
 const chokidar = require('chokidar');
@@ -35,7 +36,7 @@ var express = require('express'),
   app = express(),
   port = process.env.PORT || 5669;
 
-app.use(express.static(path.join(__dirname, '/web')));
+app.use(express.static(path.join(process.cwd(), 'web')));
 // app.use('/sounds', express.static(path.join(__dirname, 'sounds')));
 app.use('/sounds', express.static(sounds_dir));
 
@@ -68,6 +69,14 @@ const server = app.listen(port, () => {
 const io = require('socket.io')(server);
 io.sockets.on('connection', function(socket) {
   let connectedCount = Object.keys(io.sockets.sockets).length;
+  socket.on('royalty', (msg) => {
+    const options = [ 'include', 'exclude', 'only' ];
+    if (_.includes(options, msg.val) && config.royalty_status != msg.val) {
+      console.log(`new royalty_status: ${msg.val}`);
+      config.royalty_status = msg.val;
+    }
+  });
+  socket.emit('askRoyalty');
   if (config.socketDebug) {
     console.log(Object.keys(io.sockets.sockets));
     console.log(`connection number ${connectedCount}`);
@@ -79,16 +88,36 @@ io.sockets.on('connection', function(socket) {
   }
 });
 
+function royalty_filter(song_arr, royalty_status) {
+  if (song_arr.length === 0) return;
+  if (royalty_status === 'only') {
+    return song_arr.filter((c) => {
+      return c.includes('royalty-free');
+    });
+  } else if (royalty_status === 'exclude') {
+    return song_arr.filter((c) => {
+      return !c.includes('royalty-free');
+    });
+  } else {
+    return song_arr;
+  }
+}
+
 function infoToSong(stage_info) {
   try {
     stage_dir = path.join(sounds_dir, stage_info.dir_name);
     // console.log(getFiles(stage_dir));
     song_files = getFiles(stage_dir);
-    song_files = song_files.filter(
-      (f) => !f.includes('royalty-free') || !config.discardRoyaltyFree
-    );
+    song_files = royaltyFilter(song_files, config.royalty_status);
+    const available_songs_count = song_files.length;
     rand_song_file = _.shuffle(song_files)[0];
-    return { loop: `sounds/${rand_song_file}` };
+    const output = {
+      loop                  : `sounds/${rand_song_file}`,
+      available_songs_count : available_songs_count,
+      stage_name            : stage_info.stage_name
+    };
+    console.log(output);
+    return output;
   } catch (err) {
     console.log(`error getting songs ${stage_info} \n ${err}`);
   }
@@ -169,7 +198,7 @@ watcher.on('change', (path) => {
     // new game startup
     console.log(`[Game Start] New game has started`);
     // console.log(settings);
-    console.log(settings.stageId);
+    // console.log(settings.stageId);
     let stage_id = settings.stageId;
     console.log(stage_id_info[stage_id]);
     let stage_info = stage_id_info[stage_id];

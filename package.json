@@ -12,7 +12,9 @@
     "assets": [ "sounds/*", "web/*" ]
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "build": "pkg -t node14-win server.js",
+    "post-build": "copy server.exe build\\server.exe && copy config.js build\\config.js && xcopy web build\\web /S && xcopy sounds_nonfree build\\sounds /S && move build\\server.exe build\\run.exe"
   },
   "bin": "server.js",
   "name": "slippi-melee-music-player"

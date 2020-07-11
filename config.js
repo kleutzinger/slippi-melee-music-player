@@ -4,7 +4,7 @@ const config = {
   // slippi_rec_dir        : 'C:\\Users\\kevin\\Documents\\Slippi',
   // *********************************************
 
-  fileChangeTimeoutMs   : 500,
+  fileChangeTimeoutMs   : 1200,
   fileChangeDeltaPollMs : 250,
   autoClose2ndWebpage   : false, // broken
   autoOpenWebpageOnRun  : false, // works

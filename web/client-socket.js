@@ -19,11 +19,25 @@ function initSocket() {
   });
 
   socket.on('stopSong', (data) => {
+    console.log('stop song');
     stopSong();
   });
 
   socket.on('closePage', (data) => {
     // socket.disconnect();
     window.close();
+  });
+
+  socket.on('askRoyalty', (data) => {
+    sendRoyalty();
+  });
+
+  function sendRoyalty() {
+    const new_val = $('#royalty').val();
+    console.log('emit royalty ', new_val);
+    socket.emit('royalty', { val: new_val });
+  }
+  $('#royalty').change(() => {
+    sendRoyalty();
   });
 }
