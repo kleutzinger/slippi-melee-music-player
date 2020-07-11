@@ -10,12 +10,12 @@ const _ = require('lodash');
 const { connect } = require('http2');
 
 const homedir = require('os').homedir();
-if (!config.slippi_rec_dir) {
-  config.slippi_rec_dir = path.join(homedir, 'Documents', 'Slippi');
+if (!config.slippi_output_dir) {
+  config.slippi_output_dir = path.join(homedir, 'Documents', 'Slippi');
 }
 let foundSlippiFiles = false;
 try {
-  for (file of fs.readdirSync(config.slippi_rec_dir)) {
+  for (file of fs.readdirSync(config.slippi_output_dir)) {
     if (file.endsWith('.slp')) {
       foundSlippiFiles = true;
       break;
@@ -26,8 +26,8 @@ try {
 }
 if (!foundSlippiFiles) {
   console.log(`warning! no .slp files found in:
-     ${config.slippi_rec_dir}
-please modify your config.js -> slippi_rec_dir
+     ${config.slippi_output_dir}
+please modify your config.js -> slippi_output_dir
   `);
 }
 const sounds_dir = path.join(process.cwd(), 'sounds');
@@ -119,7 +119,11 @@ function infoToSong(stage_info) {
     console.log(output);
     return output;
   } catch (err) {
-    console.log(`${err}\nerror getting songs for stage ${JSON.stringify(stage_info)}\nplease add to config.js`);
+    console.log(
+      `${err}\nerror getting songs for stage ${JSON.stringify(
+        stage_info
+      )}\nplease add to config.js`
+    );
   }
 }
 
@@ -138,7 +142,7 @@ if (config.autoOpenWebpageOnRun) {
 
 var stage_id_info = config.stage_id_info;
 // console.log(stage_id_info);
-const listenPath = process.argv[2] || config['slippi_rec_dir'];
+const listenPath = process.argv[2] || config['slippi_output_dir'];
 // console.log(`Looking for Slippi files at: ${listenPath}`);
 var timeOfLastFileChange = null;
 var gameAborted = false;

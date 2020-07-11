@@ -1,7 +1,7 @@
 const config = {
   // *********************************************
   // uncomment and edit below to set where slippi puts your .slp files
-  // slippi_rec_dir        : 'C:\\Users\\kevin\\Documents\\Slippi',
+  // slippi_output_dir        : 'C:\\Users\\kevin\\Documents\\Slippi',
   // *********************************************
 
   fileChangeTimeoutMs   : 1200,
