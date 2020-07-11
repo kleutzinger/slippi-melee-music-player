@@ -3,3 +3,7 @@
   position: absolute;
   bottom: 2em;
 }
+
+li p {
+  display:inline;
+}

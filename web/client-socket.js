@@ -15,7 +15,9 @@ function initSocket() {
       data = { loop: data };
     }
     startSong(data);
-    $('#nowPlaying').text(data.loop);
+    console.log(data);
+    populateInfoOnSong(data);
+    // $('#nowPlaying').text(JSON.stringify(data, null, 1));
   });
 
   socket.on('stopSong', (data) => {
@@ -23,12 +25,17 @@ function initSocket() {
     stopSong();
   });
 
+  socket.on('error', (data)=>{
+    $("#errors").append($("<li>").text(JSON.stringify(data)));
+  })
+
   socket.on('closePage', (data) => {
     // socket.disconnect();
     window.close();
   });
 
   socket.on('askRoyalty', (data) => {
+    console.log('asked royalty_status. successful connection');
     sendRoyalty();
   });
 

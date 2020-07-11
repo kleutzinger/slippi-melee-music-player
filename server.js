@@ -88,7 +88,7 @@ io.sockets.on('connection', function(socket) {
   }
 });
 
-function royalty_filter(song_arr, royalty_status) {
+function royaltyFilter(song_arr, royalty_status) {
   if (song_arr.length === 0) return;
   if (royalty_status === 'only') {
     return song_arr.filter((c) => {
@@ -119,7 +119,7 @@ function infoToSong(stage_info) {
     console.log(output);
     return output;
   } catch (err) {
-    console.log(`error getting songs ${stage_info} \n ${err}`);
+    console.log(`${err}\nerror getting songs for stage ${JSON.stringify(stage_info)}\nplease add to config.js`);
   }
 }
 

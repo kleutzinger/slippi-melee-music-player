@@ -2,9 +2,13 @@
 <!-- <input type="file"> -->
 <div id="content">
   <audio controls id="myAudio" autoplay></audio>
-  <p id="nowPlaying">now playing:</p>
   <a href="/autoplay.png">how to enable auto play</a><br>
-  <p id="server-info"></p>
+  <p id="nowPlaying">Last Played Song:</p>
+  <ul id="server-info">
+    <li><p>stage name: </p><p id="stage_name"></p></li>
+    <li><p>song path: </p><p id="loop_path"></p></li>
+    <li><p>available songs: <p> <p id="available_songs_count"></p></li>
+  </ul>
   <label> Royalty Free Songs (by Kevbot)
     <select id="royalty" name="royalty">
       <option value="exclude" selected="selected">Exclude from rotation</option>
@@ -12,6 +16,7 @@
       <option value="only">Only play royalty free</option>
     </select>
   </label>
+  <ol id="errors"></ol>
 </div>
 <div class="footer">
   <a href="https://github.com/kleutzinger/slippi-melee-music-player">source code by Kevbot</a>

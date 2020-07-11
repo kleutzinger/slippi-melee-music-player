@@ -44,6 +44,13 @@ let stopSong = () => {
   $audio.trigger('pause');
 };
 
+function populateInfoOnSong(data){
+  $('#loop_path').text(data.loop);
+  $('#available_songs_count').text(data.available_songs_count);
+  $('#stage_name').text(data.stage_name.toLowerCase());
+
+}
+
 // startSong(fountain_song);
 $(document).ready(function() {
   initSocket();
