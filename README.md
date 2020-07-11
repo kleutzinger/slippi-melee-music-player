@@ -1,4 +1,5 @@
 https://github.com/kleutzinger/slippi-melee-music-player  
+demo: https://www.youtube.com/watch?v=l6pDUrRTPew  
 
 ### Ensuring everything works  
 1. "Slippi Recording" gecko code must be enabled in dolphin  

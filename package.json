@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "chokidar": "^2.1.4",
-    "config": "^3.3.1",
     "express": "^4.17.1",
     "lodash": "^4.17.11",
     "open": "^7.0.4",
@@ -14,7 +13,7 @@
   "scripts": {
     "start": "node server.js",
     "build": "pkg -t node14-win server.js",
-    "post-build": "mkdir build && copy server.exe build\\server.exe && copy config.js build\\config.js && xcopy web build\\web /S && xcopy sounds_nonfree build\\sounds /S && move build\\server.exe build\\run.exe && move build slippi-music-build"
+    "post-build": "mkdir build copy server.exe build\\server.exe && copy README.md build\\README.md && copy config.js build\\config.js && xcopy web build\\web /S && xcopy sounds_nonfree build\\sounds /S && move build\\server.exe build\\run.exe && move build slippi-music-build"
   },
   "bin": "server.js",
   "name": "slippi-melee-music-player"
