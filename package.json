@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "chokidar": "^2.1.4",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "lodash": "^4.17.11",
     "open": "^7.0.4",
     "slp-parser-js": "^2.3.0",
